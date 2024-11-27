@@ -1,5 +1,5 @@
 name: password_check
-description: "A new Flutter package project."
+description: "This package facilitates the implementation of a checklist for password validation"
 version: 1.0.0
 homepage: https://github.com/deyvissoneduardo/password_check.git
 

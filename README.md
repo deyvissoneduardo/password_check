@@ -1,4 +1,4 @@
-# PasswordChecklist Widget - README
+# PasswordChecklist Widget
 
 The `PasswordChecklist` widget in Flutter is a customizable UI element used to display password validation requirements and their current status. This widget helps users see which conditions their password meets in real-time, with customizable messages, colors, and icons. Below, we provide a detailed explanation of each attribute.
 

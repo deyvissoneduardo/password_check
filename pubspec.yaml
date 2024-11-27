@@ -1,7 +1,8 @@
 name: password_check
 description: "A new Flutter package project."
-version: 0.0.1
-homepage:
+version: 1.0.0
+homepage: https://github.com/deyvissoneduardo/password_check.git
+repository: https://github.com/deyvissoneduardo/password_check.git
 
 environment:
   sdk: '>=3.2.5 <4.0.0'

@@ -1,6 +1,6 @@
 # PasswordChecklist Widget
 
-The `PasswordChecklist` widget in Flutter is a customizable UI element used to display password validation requirements and their current status. This widget helps users see which conditions their password meets in real-time, with customizable messages, colors, and icons. Below, we provide a detailed explanation of each attribute.
+O widget `PasswordChecklist` em Flutter exibe regras de validação de senha em tempo real, indicando quais condições foram atendidas. Totalmente customizável em cores, mensagens, ícones e layout.
 
 <table>
 <tr>
@@ -17,161 +17,131 @@ The `PasswordChecklist` widget in Flutter is a customizable UI element used to d
 </tr>
 </table>
 
+## Uso básico
 
+```dart
+PasswordChecklist(
+  controller: myController,
+  minCharacters: 8,
+  onValidationChanged: (isValid) {
+    setState(() => _isPasswordValid = isValid);
+  },
+)
+```
 
-## Attributes
+## Parâmetros (versão 2.x)
 
-### 1. `controller`
-- **Type**: `TextEditingController`
-- **Description**: The `controller` is used to manage and listen to changes in the password input field. It should be passed from the parent widget to ensure the `PasswordChecklist` has access to the password text.
-- **Example**:
-  ```dart
-  TextEditingController myController = TextEditingController();
-  ```
+| Parâmetro | Tipo | Padrão | Desde | Descrição |
+|-----------|------|--------|-------|-----------|
+| controller | TextEditingController | (obrigatório) | 1.0.0 | Controller do campo de senha |
+| onValidationChanged | ValueChanged&lt;bool&gt; | (obrigatório) | 1.0.0 | Callback quando validação muda |
+| checkEightCharacters | bool | true | 1.0.0 | Verifica comprimento mínimo |
+| checkSpecialCharacter | bool | true | 1.0.0 | Verifica caractere especial |
+| checkNumber | bool | true | 1.0.0 | Verifica número |
+| checkUppercase | bool | true | 1.0.0 | Verifica maiúscula |
+| checkLowercase | bool | true | 1.0.0 | Verifica minúscula |
+| checkOnlyNumbers | bool | false | 2.0.0 | Rejeita senha apenas números |
+| minCharacters | int | 8 | 1.0.0 | Comprimento mínimo |
+| specialCharactersRegex | RegExp? | padrão | 2.0.0 | Regex para especiais |
+| validColor | Color? | green | 1.0.0 | Cor quando válido |
+| invalidColor | Color? | red | 1.0.0 | Cor quando inválido |
+| eightCharactersMessage | String? | pt-BR | 1.0.0 | Mensagem comprimento |
+| specialCharacterMessage | String? | pt-BR | 1.0.0 | Mensagem especial |
+| numberMessage | String? | pt-BR | 1.0.0 | Mensagem número |
+| uppercaseMessage | String? | pt-BR | 1.0.0 | Mensagem maiúscula |
+| lowercaseMessage | String? | pt-BR | 1.0.0 | Mensagem minúscula |
+| onlyNumbersMessage | String? | pt-BR | 2.0.0 | Mensagem apenas números |
+| customIcon | Widget? | null | 1.0.0 | Ícone único para todos |
+| customIconBuilder | Function? | null | 2.0.0 | Ícone por regra |
+| itemSpacing | double | 8.0 | 2.0.0 | Espaço entre itens |
+| validTextStyle | TextStyle? | null | 2.0.0 | Estilo texto válido |
+| invalidTextStyle | TextStyle? | null | 2.0.0 | Estilo texto inválido |
+| itemBuilder | Function? | null | 2.0.0 | Builder customizado |
+| padding | EdgeInsetsGeometry? | null | 2.0.0 | Padding do container |
+| margin | EdgeInsetsGeometry? | null | 2.0.0 | Margem do container |
+| crossAxisAlignment | CrossAxisAlignment | start | 2.0.0 | Alinhamento transversal |
+| mainAxisAlignment | MainAxisAlignment | start | 2.0.0 | Alinhamento principal |
+| ruleOrder | List&lt;PasswordRuleType&gt;? | null | 2.0.0 | Ordem das regras |
 
-### 2. `onValidationChanged`
-- **Type**: `ValueChanged<bool>`
-- **Description**: A callback function that is triggered whenever the password validation status changes. This allows you to handle changes in the validation state, such as enabling or disabling a submit button.
-- **Example**:
-  ```dart
-  (isValid) {
-    print(isValid ? "Password is valid" : "Password is invalid");
-  }
-  ```
+## Compatibilidade com 1.x
 
-### 3. `checkEightCharacters`
-- **Type**: `bool`
-- **Description**: Determines whether the widget checks for a minimum character length. If set to `true`, the widget will verify that the password has at least `minCharacters` characters.
-- **Default**: `true`
-- **Example**:
-  ```dart
-  checkEightCharacters: true,
-  ```
+A versão 2.0.0 é retrocompatível com 1.x. Parâmetros existentes mantêm o mesmo comportamento. Novos parâmetros são opcionais com defaults sensatos.
 
-### 4. `checkSpecialCharacter`
-- **Type**: `bool`
-- **Description**: Indicates whether the widget should check for the presence of at least one special character (e.g., `!@#$%^&*()`).
-- **Default**: `true`
-- **Example**:
-  ```dart
-  checkSpecialCharacter: true,
-  ```
+## Exemplos de customização
 
-### 5. `checkNumber`
-- **Type**: `bool`
-- **Description**: Indicates whether the widget should check for the presence of at least one numeric digit.
-- **Default**: `true`
-- **Example**:
-  ```dart
-  checkNumber: true,
-  ```
+### Regex de caracteres especiais
 
-### 6. `checkUppercase`
-- **Type**: `bool`
-- **Description**: Specifies whether the widget should verify if the password contains at least one uppercase letter.
-- **Default**: `true`
-- **Example**:
-  ```dart
-  checkUppercase: true,
-  ```
+```dart
+PasswordChecklist(
+  controller: controller,
+  onValidationChanged: (_) {},
+  specialCharactersRegex: RegExp(r'[!@#\$%&*]'),
+)
+```
 
-### 7. `checkLowercase`
-- **Type**: `bool`
-- **Description**: Determines if the widget should check for at least one lowercase letter in the password.
-- **Default**: `true`
-- **Example**:
-  ```dart
-  checkLowercase: true,
-  ```
+### Ordem customizada das regras
 
-### 8. `checkOnlyNumbers`
-- **Type**: `bool`
-- **Description**: Indicates if the widget should check if the password is composed solely of numbers.
-- **Default**: `false`
-- **Example**:
-  ```dart
-  checkOnlyNumbers: false,
-  ```
+```dart
+import 'package:password_check/password_check.dart';
 
-### 9. `minCharacters`
-- **Type**: `int`
-- **Description**: Specifies the minimum number of characters required for the password when `checkEightCharacters` is set to `true`.
-- **Default**: `8`
-- **Example**:
-  ```dart
-  minCharacters: 10,
-  ```
+PasswordChecklist(
+  controller: controller,
+  onValidationChanged: (_) {},
+  ruleOrder: [
+    PasswordRuleType.uppercase,
+    PasswordRuleType.lowercase,
+    PasswordRuleType.number,
+    PasswordRuleType.minCharacters,
+    PasswordRuleType.specialCharacter,
+  ],
+)
+```
 
-### 10. `validColor`
-- **Type**: `Color?`
-- **Description**: The color applied to the validation text and `Checkbox` when the condition is met. If not specified, it defaults to green.
-- **Example**:
-  ```dart
-  validColor: Colors.blue,
-  ```
+### Ícone por regra
 
-### 11. `invalidColor`
-- **Type**: `Color?`
-- **Description**: The color applied to the validation text and `Checkbox` when the condition is not met. If not specified, it defaults to red.
-- **Example**:
-  ```dart
-  invalidColor: Colors.orange,
-  ```
+```dart
+PasswordChecklist(
+  controller: controller,
+  onValidationChanged: (_) {},
+  customIconBuilder: (ruleId, isValid) {
+    return Icon(
+      isValid ? Icons.check_circle : Icons.cancel,
+      color: isValid ? Colors.green : Colors.red,
+      size: 20,
+    );
+  },
+)
+```
 
-### 12. `eightCharactersMessage`
-- **Type**: `String?`
-- **Description**: Customizable message displayed when the password does not meet the minimum character requirement. If not provided, the default message is "Should contain at least X characters."
-- **Example**:
-  ```dart
-  eightCharactersMessage: 'Password must be at least 12 characters long',
-  ```
+### Builder customizado (controle total)
 
-### 13. `specialCharacterMessage`
-- **Type**: `String?`
-- **Description**: Customizable message shown when the password does not contain a special character. Defaults to "Should contain a special character."
-- **Example**:
-  ```dart
-  specialCharacterMessage: 'Include at least one special character',
-  ```
+```dart
+PasswordChecklist(
+  controller: controller,
+  onValidationChanged: (_) {},
+  itemBuilder: (item) {
+    return ListTile(
+      leading: Icon(
+        item.isValid ? Icons.done : Icons.pending,
+        color: item.effectiveColor,
+      ),
+      title: Text(item.message),
+    );
+  },
+)
+```
 
-### 14. `numberMessage`
-- **Type**: `String?`
-- **Description**: Customizable message displayed when the password does not contain a number. Defaults to "Should contain a number."
-- **Example**:
-  ```dart
-  numberMessage: 'Include at least one numeric digit',
-  ```
+### Internacionalização
 
-### 15. `uppercaseMessage`
-- **Type**: `String?`
-- **Description**: Customizable message displayed when the password does not contain an uppercase letter. Defaults to "Should contain an uppercase letter."
-- **Example**:
-  ```dart
-  uppercaseMessage: 'Include at least one uppercase letter',
-  ```
-
-### 16. `lowercaseMessage`
-- **Type**: `String?`
-- **Description**: Customizable message shown when the password does not contain a lowercase letter. Defaults to "Should contain a lowercase letter."
-- **Example**:
-  ```dart
-  lowercaseMessage: 'Include at least one lowercase letter',
-  ```
-
-### 17. `onlyNumbersMessage`
-- **Type**: `String?`
-- **Description**: Customizable message displayed when the password only contains numbers. Defaults to "Should contain only numbers."
-- **Example**:
-  ```dart
-  onlyNumbersMessage: 'Password should not be only numbers',
-  ```
-
-### 18. `customIcon`
-- **Type**: `Widget?`
-- **Description**: An optional custom icon that will be displayed next to the validation message. If not provided, a default `Checkbox` will be shown.
-- **Example**:
-  ```dart
-  customIcon: Icon(Icons.check, color: Colors.blue),
-  ```
-
-
+```dart
+PasswordChecklist(
+  controller: controller,
+  onValidationChanged: (_) {},
+  eightCharactersMessage: 'At least 8 characters',
+  specialCharacterMessage: 'One special character',
+  numberMessage: 'One number',
+  uppercaseMessage: 'One uppercase letter',
+  lowercaseMessage: 'One lowercase letter',
+  onlyNumbersMessage: 'Not only numbers',
+)
+```
